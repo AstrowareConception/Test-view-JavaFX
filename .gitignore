@@ -1,0 +1,43 @@
+# -----------------------------
+# Gitignore pour projet Java/Maven + JavaFX
+# -----------------------------
+
+# Sorties de build Maven
+target/
+
+# Fichiers Java compilés (au cas où)
+*.class
+
+# Journaux et dumps JVM
+*.log
+hs_err_pid*
+replay_pid*
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# OS spécifiques
+.DS_Store
+Thumbs.db
+
+# Outils divers
+.gradle/
+
+# Maven auxiliaires 
+dependency-reduced-pom.xml
+
+# Builds/outputs additionnels éventuels
+out/
+build/
+
+# Images jlink (générées par javafx-maven-plugin) – déjà couvert par target/
+# target/test-view-javafx/
