@@ -101,14 +101,24 @@ public class Launcher extends Application {
 
     private Parent loadSanitized(String rawXml, URL baseUrl) throws IOException {
         String sanitized = FxmlSanitizer.sanitizeInlineIncludes(rawXml, baseUrl);
+
+        // Récupérer les URLs de styles puis supprimer les blocs <stylesheets> du FXML
+        java.util.List<String> styles = FxmlSanitizer.extractStylesheetUrls(sanitized);
+        String withoutStylesheets = FxmlSanitizer.stripStylesheets(sanitized);
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(baseUrl);
         // Aucun contrôleur: toute tentative est supprimée par sanitize
         // Fabrique d'emplacements de ressources pour éviter les ResourceBundle manquants
         loader.setResources(null);
-        try (var in = new java.io.ByteArrayInputStream(sanitized.getBytes(StandardCharsets.UTF_8))) {
-            return loader.load(in);
+        Parent root;
+        try (var in = new java.io.ByteArrayInputStream(withoutStylesheets.getBytes(StandardCharsets.UTF_8))) {
+            root = loader.load(in);
         }
+        if (root != null && styles != null && !styles.isEmpty()) {
+            root.getStylesheets().addAll(styles);
+        }
+        return root;
     }
 
     // Le point d'entrée se trouve dans AppMain pour éviter l'erreur
